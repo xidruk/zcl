@@ -40,7 +40,7 @@ You need Python 3 on your machine and at least one of these shell configs: `.bas
 Clone the repository and move into it:
 
 ```bash
-git clone https://github.com/your-username/zcl.git
+git clone https://github.com/xidruk/zcl.git
 cd zcl
 ```
 
