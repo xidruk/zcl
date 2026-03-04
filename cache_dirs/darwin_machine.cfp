@@ -1,0 +1,61 @@
+# System Cache
+~/.cache/*
+~/Library/Caches/*
+
+# VS Code
+~/Library/Application Support/Code/Cache/*
+~/Library/Application Support/Code/CachedData/*
+~/Library/Application Support/Code/CachedExtensionVSIXs
+~/Library/Application Support/Code/Crashpad/*
+~/Library/Application Support/Code/User/workspaceStorage/*
+~/Library/Application Support/Code/Service Worker
+~/Library/Application Support/Code/WebStorage
+
+# Cursor
+~/Library/Application Support/Cursor/Cache
+~/Library/Application Support/Cursor/CachedData
+~/Library/Application Support/Cursor/CachedExtensionVSIXs
+~/Library/Application Support/Cursor/Crashpad
+~/Library/Application Support/Cursor/User/workspaceStorage
+~/Library/Application Support/Cursor/Service Worker
+~/Library/Application Support/Cursor/WebStorage
+
+# Slack
+~/Library/Application Support/Slack/Cache/*
+~/Library/Application Support/Slack/Service Worker/CacheStorage/*
+
+# Discord
+~/Library/Application Support/discord/Cache/*
+~/Library/Application Support/discord/Code Cache/js/*
+~/Library/Application Support/discord/Crashpad/completed/*
+~/Library/Application Support/discord/Service Worker
+
+# Google Chrome
+~/Library/Application Support/Google/Chrome/Default/Service Worker/CacheStorage/*
+~/Library/Application Support/Google/Chrome/Profile [0-9]/Service Worker/CacheStorage/*
+~/Library/Application Support/Google/Chrome/Default/Application Cache/*
+~/Library/Application Support/Google/Chrome/Profile [0-9]/Application Cache/*
+~/Library/Application Support/Google/Chrome/Crashpad/completed/*
+
+# Brave Browser
+~/Library/Application Support/BraveSoftware/Brave-Browser/Default/Service Worker/CacheStorage/*
+~/Library/Application Support/BraveSoftware/Brave-Browser/Profile [0-9]/Service Worker/CacheStorage/*
+~/Library/Application Support/BraveSoftware/Brave-Browser/Default/Application Cache/*
+~/Library/Application Support/BraveSoftware/Brave-Browser/Profile [0-9]/Application Cache/*
+~/Library/Application Support/BraveSoftware/Brave-Browser/Crashpad/completed/*
+
+# Firefox
+~/Library/Caches/Firefox/*
+~/Library/Application Support/Firefox/Profiles/*/cache2/*
+
+# Opera
+~/Library/Application Support/Opera Software/Opera Stable/Service Worker
+
+# Vivaldi
+~/Library/Application Support/Vivaldi/Default/Service Worker
+
+# Spotify
+~/Library/Application Support/Spotify/PersistentCache/*
+
+# Homebrew
+# brew cleanup

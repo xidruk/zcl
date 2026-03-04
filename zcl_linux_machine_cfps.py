@@ -1,0 +1,156 @@
+import os
+import glob
+import shutil
+
+linux_cache_paths = [
+    # System Cache
+    ".cache/*",
+    
+    # Package Managers
+    ".npm/_cacache/*",
+    ".bun/install/cache/*",
+    ".cache/pip/*",
+    ".yarn/cache/*",
+    ".cargo/registry/cache/*",
+    ".gem/ruby/*/cache/*",
+    
+    # VS Code
+    ".config/Code/Cache",
+    ".config/Code/CachedData",
+    ".config/Code/CachedExtensionVSIXs",
+    ".config/Code/Crashpad",
+    ".config/Code/User/workspaceStorage",
+    ".config/Code/Service Worker",
+    ".config/Code/WebStorage",
+    ".var/app/com.visualstudio.code/cache/*",
+    ".var/app/com.visualstudio.code/config/Code/Cache/*",
+    ".var/app/com.visualstudio.code/config/Code/CachedData/*",
+    ".var/app/com.visualstudio.code/config/Code/CachedExtensionVSIXs/*",
+    ".var/app/com.visualstudio.code/config/Code/User/workspaceStorage/*",
+    ".var/app/com.visualstudio.code/config/Code/Crashpad/completed/*",
+    ".vscode/extensions/*/node_modules/*",
+    
+    # Cursor (Code Editor)
+    ".config/Cursor/Cache",
+    ".config/Cursor/CachedData",
+    ".config/Cursor/CachedExtensionVSIXs",
+    ".config/Cursor/Crashpad",
+    ".config/Cursor/User/workspaceStorage",
+    ".config/Cursor/Service Worker",
+    ".config/Cursor/WebStorage",
+    
+    # Discord
+    ".var/app/com.discordapp.Discord/cache/*",
+    ".var/app/com.discordapp.Discord/config/discord/Cache/*",
+    ".var/app/com.discordapp.Discord/config/discord/Code Cache/js*",
+    ".var/app/com.discordapp.Discord/config/discord/Crashpad/completed/*",
+    
+    # Slack
+    ".var/app/com.slack.Slack/cache/*",
+    ".var/app/com.slack.Slack/config/Slack/Cache/*",
+    ".var/app/com.slack.Slack/config/Slack/Service Worker/CacheStorage/*",
+    ".var/app/com.slack.Slack/config/Slack/Crashpad/completed/*",
+    
+    # Google Chrome
+    ".cache/google-chrome/Default/Cache/*",
+    ".var/app/com.google.Chrome/cache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/component_crx_cache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/extensions_crx_cache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Default/Service Worker/ScriptCache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Default/Service Worker/CacheStorage/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Default/Application Cache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Default/File System/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Profile [0-9]/Service Worker/ScriptCache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Profile [0-9]/Service Worker/CacheStorage/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Profile [0-9]/Application Cache/*",
+    ".var/app/com.google.Chrome/config/google-chrome/Profile [0-9]/File System/*",
+    
+    # Brave Browser
+    ".cache/brave/Default/Cache/*",
+    ".var/app/com.brave.Browser/cache/*",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Default/Service Worker/CacheStorage/*",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Default/Application Cache/*",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Default/File System",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Profile [0-9]/Service Worker/CacheStorage/*",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Profile [0-9]/Application Cache/*",
+    ".var/app/com.brave.Browser/config/BraveSoftware/Brave-Browser/Profile [0-9]/File System",
+    
+    # Firefox
+    ".var/app/org.mozilla.firefox/cache/*",
+    ".var/app/org.mozilla.firefox/.mozilla/firefox/Crash Reports/*",
+    ".var/app/org.mozilla.firefox/.mozilla/firefox/*.default*/cache2/*",
+    ".var/app/org.mozilla.firefox/.mozilla/firefox/*.default*/startupCache/*",
+    ".var/app/org.mozilla.firefox/.mozilla/firefox/*.default*/OfflineCache/*",
+    
+    # Opera
+    ".var/app/com.opera.Opera/cache/*",
+    ".var/app/com.opera.Opera/config/opera/Default/Service Worker",
+    
+    # Vivaldi
+    ".var/app/com.vivaldi.Vivaldi/cache/*",
+    ".var/app/com.vivaldi.Vivaldi/config/vivaldi/Default/Service Worker",
+    
+    # Spotify
+    ".var/app/com.spotify.Client/cache/*",
+    ".var/app/com.spotify.Client/config/spotify/PersistentCache/*",
+    
+    # GitKraken
+    ".config/GitKraken/Cache",
+    ".var/app/com.gitkraken/common/.cache",
+    
+    # Obsidian
+    ".var/app/com.obsidian/common/.cache",
+    
+    # Docker
+    ".docker/*/cache/*",
+    
+    # Generic Flatpak Apps
+    ".var/app/*/cache/*",
+    
+    # Thumbnails
+    ".cache/thumbnails/*",
+    ".thumbnails/*",
+    
+    # Trash
+    ".local/share/Trash/*",
+    ".local/share/Trash/files/*",
+    ".local/share/Trash/info/*",
+    
+    # 42 School Specific
+    ".42*",
+    ".zcompdump*",
+]
+
+def _delete_target(path: str):
+    if os.path.isfile(path) or os.path.islink(path):
+        os.remove(path)
+    elif os.path.isdir(path):
+        for entry in os.scandir(path):
+            if entry.is_dir(follow_symlinks=False):
+                shutil.rmtree(entry.path, ignore_errors=True)
+            else:
+                os.remove(entry.path)
+
+def purge_linux_cfps(username: str):
+    home = f"/home/{username}"
+    deleted = 0
+    errors = 0
+
+    for pattern in linux_cache_paths:
+        full_pattern = os.path.join(home, pattern)
+        matches = glob.glob(full_pattern, recursive=True)
+        for match in matches:
+            try:
+                _delete_target(match)
+                deleted += 1
+            except Exception:
+                errors += 1
+
+    print(f"  => Deleted {deleted} item(s), {errors} error(s).")
+
+def show_linux_cfps(username: str):
+    home = f"/home/{username}"
+    index = 0
+    while index < len(linux_cache_paths):
+        print(f"  LINUX CFP => {home}/{linux_cache_paths[index]}")
+        index += 1
