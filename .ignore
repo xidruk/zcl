@@ -1,0 +1,14 @@
+*.o
+*.obj
+*.so
+*.pyc
+
+
+__pycache__/
+.venv/
+venv/
+env/
+
+.DS_Store
+.vscode/
+
